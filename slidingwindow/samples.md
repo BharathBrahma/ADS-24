@@ -173,3 +173,85 @@ Keep one template per **constraint** in your head:
 - **`lastSeen` jump** for pure “no repeat”.
 
 With these, most medium sliding-window questions fall quickly in interviews.
+
+
+---
+
+## 6) Fixed-Size Sliding Window Examples
+
+### Example A — Maximum Sum Subarray of Size K
+**Problem:** Given an array, find the maximum sum of any contiguous subarray of size `k`.
+
+**Java**
+```java
+int maxSumSubarray(int[] arr, int k) {
+    int sum = 0, best = Integer.MIN_VALUE;
+    int l = 0;
+    for (int r = 0; r < arr.length; r++) {
+        sum += arr[r];
+
+        if (r - l + 1 > k) {
+            sum -= arr[l++];
+        }
+        if (r - l + 1 == k) {
+            best = Math.max(best, sum);
+        }
+    }
+    return best;
+}
+```
+**Time:** O(n), **Space:** O(1).
+
+---
+
+### Example B — Count Subarrays of Size K with Average ≥ Threshold
+**Problem (LC 1343):** Return the number of subarrays of length `k` with average ≥ threshold.
+
+**Java**
+```java
+int numOfSubarrays(int[] arr, int k, int threshold) {
+    int target = threshold * k;
+    int sum = 0, count = 0;
+    int l = 0;
+    for (int r = 0; r < arr.length; r++) {
+        sum += arr[r];
+
+        if (r - l + 1 > k) {
+            sum -= arr[l++];
+        }
+        if (r - l + 1 == k && sum >= target) {
+            count++;
+        }
+    }
+    return count;
+}
+```
+**Time:** O(n), **Space:** O(1).
+
+---
+
+## 7) Quick Practice Problems (Fixed + Variable)
+
+1. **Fixed-size:**  
+   - Find the maximum average of any subarray of size `k`.  
+   *(Tip: just max over `sum/k` in the fixed-size template.)*
+
+2. **Variable-size:**  
+   - LC 76 — Minimum Window Substring.  
+   *(Harder variant: map tracks required counts; shrink when all met.)*
+
+3. **Variable-size:**  
+   - LC 1004 — Max Consecutive Ones III.  
+   *(Like LC 424 but with binary array; condition `(windowLen - countOnes) ≤ k`.)*
+
+4. **Fixed-size variant:**  
+   - LC 239 — Sliding Window Maximum (monotonic deque, advanced).
+
+---
+
+### Study Strategy Before Interview
+- **Day before:** Dry-run LC 3, LC 340, LC 424, LC 904 (variable-size).  
+- **Morning of:** Do 1–2 fixed-size (max sum, count averages) to refresh template.  
+- **In interview:** State invariant clearly (“window valid iff …”), then code.  
+
+---
